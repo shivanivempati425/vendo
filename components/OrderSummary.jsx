@@ -4,7 +4,7 @@ import AddressModal from './AddressModal';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import {Protect, useAuth, useUser} from '@clerk/nextjs'
+import {Show, useAuth, useUser} from '@clerk/nextjs'
 import axios from 'axios';
 import { fetchCart } from '@/lib/features/cart/cartSlice';
 
@@ -131,7 +131,9 @@ const OrderSummary = ({ totalPrice, items }) => {
                     </div>
                     <div className='flex flex-col gap-1 font-medium text-right'>
                         <p>{currency}{totalPrice.toLocaleString()}</p>
-                        <p><Protect plan={'plus'} fallback={`${currency}5`}>Free</Protect></p>
+                        <p><Show when={{
+                            plan: 'plus'
+                        }} fallback={`${currency}5`}>Free</Show></p>
                         {coupon && <p>{`-${currency}${(coupon.discount / 100 * totalPrice).toFixed(2)}`}</p>}
                     </div>
                 </div>
@@ -153,9 +155,11 @@ const OrderSummary = ({ totalPrice, items }) => {
             <div className='flex justify-between py-4'>
                 <p>Total:</p>
                 <p className='font-medium text-right'>
-                    <Protect plan={'plus'} fallback={`${currency}${coupon ? (totalPrice + 5 - (coupon.discount / 100 * totalPrice)).toFixed(2) : (totalPrice + 5).toLocaleString()}`}>  
+                    <Show when={{
+                        plan: 'plus'
+                    }} fallback={`${currency}${coupon ? (totalPrice + 5 - (coupon.discount / 100 * totalPrice)).toFixed(2) : (totalPrice + 5).toLocaleString()}`}>  
                     {currency}{coupon ? (totalPrice - (coupon.discount / 100 * totalPrice)).toFixed(2) : totalPrice.toLocaleString()}
-                    </Protect>
+                    </Show>
                     </p>
             </div>
             <button onClick={e => toast.promise(handlePlaceOrder(e), { loading: 'placing Order...' })} className='w-full bg-slate-700 text-white py-2.5 rounded hover:bg-slate-900 active:scale-95 transition-all'>Place Order</button>
@@ -163,7 +167,7 @@ const OrderSummary = ({ totalPrice, items }) => {
             {showAddressModal && <AddressModal setShowAddressModal={setShowAddressModal} />}
 
         </div>
-    )
+    );
 }
 
 export default OrderSummary
