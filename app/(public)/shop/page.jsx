@@ -4,7 +4,6 @@ import ProductCard from "@/components/ProductCard"
 import { MoveLeftIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useSelector } from "react-redux"
-import {productDummyData} from "@/assets/assets"
 
  function ShopContent() {
 
@@ -26,7 +25,7 @@ import {productDummyData} from "@/assets/assets"
             <div className=" max-w-7xl mx-auto">
                 <h1 onClick={() => router.push('/shop')} className="text-2xl text-slate-500 my-6 flex items-center gap-2 cursor-pointer"> {search && <MoveLeftIcon size={20} />}  All <span className="text-slate-700 font-medium">Products</span></h1>
                 <div className="grid grid-cols-2 sm:flex flex-wrap gap-6 xl:gap-12 mx-auto mb-32">
-                    {productDummyData.map((product) => <ProductCard key={product.id} product={product} />)}
+                    {filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)}
                 </div>
             </div>
         </div>
